@@ -3,9 +3,19 @@ penguinPromise.then(
 
 function(penguins)
     {
-        var quizHeader = document.getElementById("quizes")
-        quizHeader.onclick("click", makeTable(penguins, "quiz"));
-        console.log("Works")
+        d3.select("#quizes").on("click", function(){
+            makeTable(penguins, "quiz")
+        });
+        d3.select("#tests").on("click", function(){
+            makeTable(penguins, "test")
+        });
+        d3.select("#homework").on("click", function(){
+            makeTable(penguins, "hw")
+        });
+        d3.select("#final").on("click", function(){
+            makeTable(penguins, "final")
+        });
+        console.log("Works");
         makeTable(penguins, "none");
         
     },
@@ -19,8 +29,13 @@ function(err)
 
 var makeTable = function(penguins, criteria)
 {
-    d3.selectAll("dataRows").remove();
-    
+    console.log(criteria);
+    var table = document.getElementById("table");
+    while(table.childNodes.item(2) != null)
+    {
+          table.removeChild(table.childNodes.item(2));
+    }
+
     if(criteria == "quiz")
         {
             penguins.sort(function(a, b){
@@ -60,7 +75,7 @@ var makeTable = function(penguins, criteria)
         
             })
         }
-    else
+    else if(criteria == "final")
         {
             penguins.sort(function(a, b){
         var aFinal = a.final[0].grade;
