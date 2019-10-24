@@ -15,8 +15,9 @@ function(penguins)
         d3.select("#final").on("click", function(){
             makeTable(penguins, "final")
         });
-        console.log("Works");
         makeTable(penguins, "none");
+        
+        
         
     },
 
@@ -29,7 +30,6 @@ function(err)
 
 var makeTable = function(penguins, criteria)
 {
-    console.log(criteria);
     var table = document.getElementById("table");
     while(table.childNodes.item(2) != null)
     {
@@ -84,7 +84,7 @@ var makeTable = function(penguins, criteria)
         })
         }
     
-    var row = d3.select("table").selectAll("tr").data(penguins).enter().append("tr").attr("class", "dataRow");
+    var row = d3.select("table").selectAll("tr").data(penguins).enter().append("tr")
     row.append("td").append("img").attr("src", function(d) { return d.picture; });
     row.append("td").text(function(d) {
         var quizGrades = d.quizes.map(function(quizes) { return quizes.grade});
@@ -105,4 +105,26 @@ var makeTable = function(penguins, criteria)
         return d.final[0].grade;
     });
     
+    var penguin = row.append("td").text(function(d){ return classAverage(d) });
+}
+
+var classAverage = function(penguin)
+{
+    var quizes = penguin.quizes.map(function(quizObject) {
+        return quizObject.grade;
+    })
+    var quizAverage = d3.mean(quizes);
+    var tests = penguin.test.map(function(testObject) {
+        return testObject.grade;
+    })
+    var testAverage = d3.mean(tests);
+    
+    var homework = penguin.homework.map(function(hwObject) {
+        return hwObject.grade;
+    })
+    var homeworkAverage = d3.mean(homework);
+    
+    var finalGrade = penguin.final[0].grade;
+
+    return (quizAverage * 2) + (testAverage * 0.3) + (homeworkAverage * 0.3) + (finalGrade * 0.35);
 }
